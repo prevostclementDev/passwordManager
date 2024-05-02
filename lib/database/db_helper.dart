@@ -10,6 +10,7 @@ class DbHelper {
 
   Future getDatabase() async {
 
+    sqfliteFfiInit();
     sql.databaseFactory = databaseFactoryFfi;
 
     WidgetsFlutterBinding.ensureInitialized();
