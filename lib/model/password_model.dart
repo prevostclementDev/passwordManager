@@ -15,13 +15,9 @@ class Password {
     return {
       'site_name': site_name,
       'site_url': site_url,
-      'password': password
+      'password': password,
+      'id_user' : 0
     };
-  }
-
-  Future list() async {
-    final db = await DbHelper().getDatabase();
-    print( await db.query('passwords') );
   }
 
 }
