@@ -1,30 +1,82 @@
-# password_administrator
+# Gestionnaire de mot de passe
+Dart/Flutter 
 
-A new Flutter project.
+## Table des matières
 
-## Getting Started
+***
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
+* [Installer le projet](#installer-le-projet)
+  * [Cloner le projet](#cloner-le-projet)
+  * [les dépendances](#mettre-à-jourinstaller-les-packages)
+  * [Lancer le projet](#run-le-projet)
+* [Compilation vers une plateforme cible](#compiler-le-projet-vers-windows)
+* [Lancer les tests](#lancer-les-tests)
+* [Cahier des charges](#cahier-des-charges)
+* [Ressources](#ressources)
+* [Commentaires](#difficultéscommentaires)
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installer le projet
+***
 
-## Assets
+### Cloner le projet
 
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
+via SSH :
 
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
+```shell
+git clone git@github.com:prevostclementDev/passwordManager.git
+```
 
-## Localization
+via HTTPS : 
 
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
+````shell
+git clone https://github.com/prevostclementDev/passwordManager.git
+````
 
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+### Mettre à jour/installer les packages
+
+````shell
+flutter pub upgrade
+````
+
+### Run le projet
+
+````shell
+flutter run lib/main.dart
+````
+
+## Compiler le projet vers windows
+***
+
+Si besoin, activé le support pour le build vers Windows.
+
+```shell
+flutter config --enable-windows-desktop
+```
+
+Compilation vers Windows :
+
+````shell
+flutter build windows
+````
+
+Le résultat du build est trouvable dans build\windows\x64\runner\Release
+
+## Lancer les tests
+***
+
+à écrire
+
+## Cahier des charges
+***
+
+à écrire
+
+## Ressources
+***
+
+à écrire
+
+## Difficultés/Commentaires
+***
+
+à écrire

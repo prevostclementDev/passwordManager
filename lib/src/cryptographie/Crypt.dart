@@ -12,7 +12,7 @@ class Crypt {
   );
 
   Crypt() {
-    final env = dotenv.DotEnv()..load();
+    final env = dotenv.DotEnv().load();
     final masterKeyBase64 = env['SECRET_KEY'];
     final masterKeyBytes = base64Decode(masterKeyBase64!);
     masterKey = SecretKey(masterKeyBytes);

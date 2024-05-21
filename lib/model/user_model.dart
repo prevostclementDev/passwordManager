@@ -19,12 +19,6 @@ class User {
   Future list() async {
     final db = await DbHelper().getDatabase();
     final usersList = await db.query('users');
-
-    return [
-      for (final user in usersList)
-        User(id: user['id'], username: user['username'], password: user['password'])
-    ];
-
   }
 
 }
