@@ -12,9 +12,14 @@ class User {
     required this.password,
   });
 
-  Future list() async {
+  Future<List<User>> list() async {
     final db = await DbHelper().getDatabase();
-    print( await db.query('users') );
+    final usersList = await db.query('users');
+
+    return [
+      for (final user in usersList)
+        User(id: user['id'], username: user['username'], password: user['password'])
+    ];
 
   }
 

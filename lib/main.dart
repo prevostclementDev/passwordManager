@@ -1,18 +1,14 @@
-import 'package:flutter/material.dart';
-
-import 'model/user_model.dart';
-import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:password_administrator/src/app.dart';
+import 'package:password_administrator/src/settings/settings_controller.dart';
+import 'package:password_administrator/src/settings/settings_service.dart';
 
 void main() async {
 
-  // final settingsController = SettingsController(SettingsService());
-  //
-  // await settingsController.loadSettings();
-  //
-  // runApp(MyApp(settingsController: settingsController));
+  final settingsController = SettingsController(SettingsService());
 
-  const User user = User(id: 10, username: 'clement', password: 'prevost');
-  user.list();
+  await settingsController.loadSettings();
+
+  runApp(MyApp(settingsController: settingsController));
+
 }
