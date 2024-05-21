@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_administrator/database/db_helper.dart';
+import 'package:password_administrator/src/forms/form_register.dart';
 import 'package:password_administrator/src/views/home.dart';
 
 class FormLogin extends StatefulWidget {
@@ -74,6 +75,16 @@ class FormLoginState extends State<FormLogin> {
               onPressed: submit,
               child: const Text('Connexion'),
             ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FormRegister()),
+                );
+              },
+              child: const Text('Je n\'ai pas de compte'),
+            )
           ],
         ),
       ),

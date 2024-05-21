@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:password_administrator/database/db_helper.dart';
 import 'package:password_administrator/model/user_model.dart';
+import 'package:password_administrator/src/forms/form_login.dart';
+import 'package:password_administrator/src/views/home.dart';
 
 class FormRegister extends StatefulWidget {
     const FormRegister({super.key});
@@ -37,6 +39,10 @@ class FormRegisterState extends State<FormRegister> {
       if (result > 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Votre compte a été créé !')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -88,8 +94,18 @@ class FormRegisterState extends State<FormRegister> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: submit,
-                child: const Text('S\'incrire'),
+                child: const Text('S\'inscrire'),
               ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const FormLogin()),
+                  );
+                },
+                child: const Text('J\'ai déjà un compte'),
+              )
             ],
           ),
         ),

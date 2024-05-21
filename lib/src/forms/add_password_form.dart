@@ -4,7 +4,6 @@ import 'package:password_administrator/model/password_model.dart';
 
 class AddPasswordForm extends StatefulWidget {
   const AddPasswordForm({super.key});
-
   @override
   AddPasswordFormState createState() => AddPasswordFormState();
 }
@@ -24,13 +23,9 @@ class AddPasswordFormState extends State<AddPasswordForm> {
       );
 
       final dbHelper = DbHelper();
-      final db = await dbHelper.getDatabase();
+      final result = await dbHelper.addPassword(password);
 
-      await db.insert('passwords', password.toMap());
-
-      _nameController.clear();
-      _urlController.clear();
-      _passwordController.clear();
+      print('Result: $result');
 
       _showSnackBar('Mot de passe ajouté avec succès');
     }
