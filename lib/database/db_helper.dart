@@ -45,4 +45,12 @@ class DbHelper {
 
     return result;
   }
+
+  Future<List<Password>> getPasswords(int userId) async {
+    final db = await getDatabase();
+
+    final results = await db.query('passwords', where: 'id_user = ?', whereArgs: [userId]);
+    
+    return results.map((result) => Password.fromMap(result)).toList();
+  }
 }

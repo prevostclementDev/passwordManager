@@ -22,4 +22,10 @@ class Password {
     };
   }
 
+  Password.fromMap(Map<String, dynamic> map) : this(
+    site_name: map['site_name'],
+    site_url: map['site_url'],
+    password: map['password'],
+    id_user: map['id_user'],
+  );
 }
