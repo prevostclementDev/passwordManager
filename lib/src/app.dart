@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:password_administrator/src/forms/form_login.dart';
+import 'package:password_administrator/src/forms/form_register.dart';
 
-import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
 
 class MyApp extends StatelessWidget {
@@ -22,8 +23,9 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-
-          home: const SampleItemListView(),
+          debugShowCheckedModeBanner: false,
+          title: 'Gestionnaire de mots de passe',
+          home: const FormLogin(),
         );
       },
     );
