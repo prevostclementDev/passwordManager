@@ -22,7 +22,6 @@ class Password {
   Future list() async {
     final db = await DbHelper().getDatabase();
     print( await db.query('passwords') );
-
   }
 
 }

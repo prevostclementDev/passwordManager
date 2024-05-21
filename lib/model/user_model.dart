@@ -20,5 +20,4 @@ class User {
     final db = await DbHelper().getDatabase();
     final usersList = await db.query('users');
   }
-
 }
