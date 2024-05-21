@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_administrator/database/db_helper.dart';
+import 'package:password_administrator/globals.dart';
 import 'package:password_administrator/model/password_model.dart';
 
 class AddPasswordForm extends StatefulWidget {
@@ -13,6 +14,7 @@ class AddPasswordFormState extends State<AddPasswordForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _urlController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final globals = Globals();
 
   Future<void> _addPassword() async {
     if (_formKey.currentState!.validate()) {
@@ -20,6 +22,7 @@ class AddPasswordFormState extends State<AddPasswordForm> {
         site_name: _nameController.text,
         site_url: _urlController.text,
         password: _passwordController.text,
+        id_user: globals.userId,
       );
 
       final dbHelper = DbHelper();
