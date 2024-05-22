@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   List<Password> _passwords = [];
   final globals = Globals();
-  bool _isPasswordVisible = false;
   
   @override
   void initState() {
@@ -26,7 +25,13 @@ class HomePageState extends State<HomePage> {
     final dbHelper = DbHelper();
     final passwords = await dbHelper.getPasswords(globals.userId);
     setState(() {
-      _passwords = passwords;
+      _passwords = passwords.map((password) => Password(
+          site_name: password.site_name,
+          site_url: password.site_url,
+          password: password.password,
+          id_user: password.id_user,
+          isPasswordVisible: false,
+        )).toList();
     });
   }
 
@@ -40,7 +45,6 @@ class HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('Bienvenue dans le gestionnaire de mots de passe !'),
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
@@ -53,28 +57,60 @@ class HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16.0),
             Expanded(
-              child: ListView.builder(
-                itemCount: _passwords.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final password = _passwords[index];
-                  return ListTile(
-                    title: Text(password.site_name),
-                    subtitle: Text(password.site_url),
-                    trailing: IconButton(
-                      icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () {
-                        setState(() {
-                          _isPasswordVisible =!_isPasswordVisible;
-                        });
-                      },
+              child: _passwords.isEmpty
+                ? const Center(child: Text('Aucun mot de passe enregistré'))
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: const <DataColumn>[
+                          DataColumn(
+                            label: Text('Nom du site'),
+                          ),
+                          DataColumn(
+                            label: Text('URL'),
+                          ),
+                          DataColumn(
+                            label: Text('Mot de passe'),
+                          ),
+                        ],
+                        rows: _passwords.map((password) {
+                          return DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text(password.site_name)),
+                              DataCell(Text(password.site_url),),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        initialValue: password.password,
+                                        obscureText: !password.isPasswordVisible,
+                                        enabled: false,
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(password.isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                                      onPressed: () {
+                                        setState(() {
+                                          password.isPasswordVisible = !password.isPasswordVisible;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  );
-                },
-              )
             )
           ],
         ),
-      ),      
+      ),
     );
   }
 }

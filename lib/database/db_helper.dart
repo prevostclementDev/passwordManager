@@ -50,7 +50,6 @@ class DbHelper {
     final db = await getDatabase();
 
     final results = await db.query('passwords', where: 'id_user = ?', whereArgs: [userId]);
-    
-    return results.map((result) => Password.fromMap(result)).toList();
+    return List.from(results.map((result) => Password.fromMap(result)));
   }
 }
