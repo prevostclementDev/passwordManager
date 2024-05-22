@@ -3,6 +3,7 @@ import 'package:password_administrator/database/db_helper.dart';
 import 'package:password_administrator/globals.dart';
 import 'package:password_administrator/model/password_model.dart';
 import 'package:password_administrator/src/forms/add_password_form.dart';
+import 'package:password_administrator/src/forms/form_login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +14,6 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   List<Password> _passwords = [];
-  final globals = Globals();
   
   @override
   void initState() {
@@ -23,7 +23,7 @@ class HomePageState extends State<HomePage> {
 
   Future<void> _getPasswords() async {
     final dbHelper = DbHelper();
-    final passwords = await dbHelper.getPasswords(globals.userId);
+    final passwords = await dbHelper.getPasswords(Globals.user['id']);
     setState(() {
       _passwords = passwords.map((password) => Password(
           site_name: password.site_name,
@@ -35,11 +35,30 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  String connectFromText = "Connecté en tant que ${Globals.user['username']}";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gestionnaire de mots de passe'),
+        bottom: PreferredSize(
+            preferredSize: Size.zero,
+            child: Text(connectFromText, textAlign: TextAlign.left)
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Se déconnecter',
+            onPressed: () {
+              Globals.user = {};
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const FormLogin()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(

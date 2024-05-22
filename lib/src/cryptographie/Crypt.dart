@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:cryptography/cryptography.dart';
-import 'package:dotenv/dotenv.dart' as dotenv;
+import '../../globals.dart';
 
 class Crypt {
 
@@ -12,8 +11,7 @@ class Crypt {
   );
 
   Crypt() {
-    final env = dotenv.DotEnv().load();
-    final masterKeyBase64 = env['SECRET_KEY'];
+    final masterKeyBase64 = Globals.env['SECRET_KEY'];
     final masterKeyBytes = base64Decode(masterKeyBase64!);
     masterKey = SecretKey(masterKeyBytes);
   }
@@ -27,6 +25,9 @@ class Crypt {
   // return { nonce, cipherText, mac }
   explodeStringBox(String stringBox) {
     final splitted = stringBox.split('-');
+
+    if ( splitted.length != 3 ) return splitted;
+
     return {
       'nonce' : base64Decode(splitted[0]),
       'cipherText' : base64Decode(splitted[1]),
@@ -43,13 +44,31 @@ class Crypt {
   }
 
   // get content of secretBox
-  Future decryptString(List<int> nonce, List<int> cipherText, List<int> mac ) async {
+  Future <String> decryptString(List<int> nonce, List<int> cipherText, List<int> mac ) async {
     final secretBox = SecretBox(cipherText, nonce: nonce, mac: Mac(mac));
     final clearText = await algorithm.decrypt(
         secretBox,
         secretKey: masterKey
     );
     return String.fromCharCodes(clearText);
+  }
+
+  // Hash password
+  Future hashPassword(String password) async {
+    final algorithm = Argon2id(
+      memory: 10*1000, // 10 MB
+      parallelism: 2, // Use maximum two CPU cores.
+      iterations: 1, // For more security, you should usually raise memory parameter, not iterations.
+      hashLength: 32, // Number of bytes in the returned hash
+    );
+
+    final secretKey = await algorithm.deriveKeyFromPassword(
+      password: password,
+      nonce: [1, 2, 3],
+    );
+    final secretKeyBytes = await secretKey.extractBytes();
+
+    return secretKeyBytes.join(':');
   }
 
 }

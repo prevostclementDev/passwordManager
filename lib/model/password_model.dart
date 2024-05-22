@@ -1,9 +1,9 @@
-import 'package:password_administrator/database/db_helper.dart';
+import 'package:password_administrator/src/cryptographie/Crypt.dart';
 
 class Password {
-  final String site_name;
-  final String site_url;
-  final String password;
+  String site_name;
+  String site_url;
+  String password;
   final int id_user;
   bool isPasswordVisible;
 
@@ -13,7 +13,37 @@ class Password {
     required this.password,
     required this.id_user,
     this.isPasswordVisible = false,
-  });
+  }) {
+    decryptData();
+  }
+
+  Password.fromMap(Map<String, dynamic> map) : this(
+      site_name: map['site_name'],
+      site_url: map['site_url'],
+      password: map['password'],
+      id_user: map['id_user'],
+      isPasswordVisible : false
+  );
+
+  decryptData() async {
+    final crypt = Crypt();
+
+    final siteNameCryptExplode =  crypt.explodeStringBox(site_name);
+    if ( siteNameCryptExplode.length == 3 ) {
+      site_name = await crypt.decryptString( siteNameCryptExplode['nonce'] , siteNameCryptExplode['cipherText'], siteNameCryptExplode['mac'] );
+    }
+
+    final siteUrlCryptExplode =  crypt.explodeStringBox(site_url);
+    if ( siteUrlCryptExplode.length == 3 ) {
+      site_url = await crypt.decryptString( siteUrlCryptExplode['nonce'] , siteUrlCryptExplode['cipherText'], siteUrlCryptExplode['mac'] );
+    }
+
+    final passwordCryptExplode =  crypt.explodeStringBox(password);
+    if ( passwordCryptExplode.length == 3 ) {
+      password = await crypt.decryptString( passwordCryptExplode['nonce'] , passwordCryptExplode['cipherText'], passwordCryptExplode['mac'] );
+    }
+
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -24,11 +54,19 @@ class Password {
     };
   }
 
-  Password.fromMap(Map<String, dynamic> map) : this(
-    site_name: map['site_name'],
-    site_url: map['site_url'],
-    password: map['password'],
-    id_user: map['id_user'],
-    isPasswordVisible : false
-  );
+  Future <Map<String, Object?>> toEncryptMap() async {
+
+    final cryptTools = Crypt();
+    final encryptSiteName = cryptTools.createStringFromBox( await cryptTools.encryptString(site_name) );
+    final encryptSiteUrl = cryptTools.createStringFromBox( await cryptTools.encryptString(site_url) );
+    final encryptPassword = cryptTools.createStringFromBox( await cryptTools.encryptString(password) );
+
+    return {
+      'site_name': encryptSiteName,
+      'site_url': encryptSiteUrl,
+      'password': encryptPassword,
+      'id_user' : id_user,
+    };
+  }
+
 }

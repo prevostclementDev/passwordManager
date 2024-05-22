@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:password_administrator/database/db_helper.dart';
+import 'package:password_administrator/globals.dart';
 import 'package:password_administrator/model/user_model.dart';
+import 'package:password_administrator/src/cryptographie/Crypt.dart';
 import 'package:password_administrator/src/forms/form_login.dart';
 import 'package:password_administrator/src/views/home.dart';
 
@@ -24,26 +26,50 @@ class FormRegisterState extends State<FormRegister> {
 
   Future<void> submit() async {
     if (_formKey.currentState?.validate() ?? false) {
+      final crypt = Crypt();
+
       final user = User(
         username: _controller1.text,
-        password: _controller2.text,
+        password: await crypt.hashPassword(_controller2.text),
       );
 
       final dbHelper = DbHelper();
       final result = await dbHelper.addUser(user);
 
-      print('Result: $result');
-
       if (!mounted) return;
 
       if (result > 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Votre compte a été créé !')),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
-        );
+        final db = await dbHelper.getDatabase();
+
+        final results = await db.query('users',
+            where: 'username = ? AND password = ?',
+            whereArgs: [user.username, user.password]);
+
+        if (results.isNotEmpty) {
+          // L'utilisateur est authentifié avec succès
+          Globals.user = results.first;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Votre compte a été créé !')),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+
+        } else {
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Compte créé, mais une erreur est survenue pendant la connexion.')),
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const FormLogin()),
+          );
+
+        }
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erreur lors de l\'inscription.')),

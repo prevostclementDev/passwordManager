@@ -39,7 +39,7 @@ class DbHelper {
 
     final result = await db.insert(
       'passwords',
-      password.toMap(),
+      await password.toEncryptMap(),
       conflictAlgorithm: sql.ConflictAlgorithm.replace,
     );
 

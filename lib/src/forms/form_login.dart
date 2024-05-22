@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:password_administrator/database/db_helper.dart';
 import 'package:password_administrator/globals.dart';
+import 'package:password_administrator/src/cryptographie/Crypt.dart';
 import 'package:password_administrator/src/forms/form_register.dart';
 import 'package:password_administrator/src/views/home.dart';
 
@@ -14,11 +15,12 @@ class FormLogin extends StatefulWidget {
 class FormLoginState extends State<FormLogin> {
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  final globals = Globals();
 
   Future<void> submit() async {
+    final crypt = Crypt();
+
     final username = _controllerUsername.text;
-    final password = _controllerPassword.text;
+    final password = await crypt.hashPassword(_controllerPassword.text);
 
     final dbHelper = DbHelper();
     final db = await dbHelper.getDatabase();
@@ -31,7 +33,7 @@ class FormLoginState extends State<FormLogin> {
 
     if (results.isNotEmpty) {
       // L'utilisateur est authentifié avec succès
-      globals.userId = results.first['id'];
+      Globals.user = results.first;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Connexion établie !')),
       );
