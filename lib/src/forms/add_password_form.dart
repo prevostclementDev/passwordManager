@@ -25,9 +25,13 @@ class AddPasswordFormState extends State<AddPasswordForm> {
       );
 
       final dbHelper = DbHelper();
-      final result = await dbHelper.addPassword(password);
+      await dbHelper.addPassword(password);
 
-      _showSnackBar('Mot de passe ajouté avec succès');
+
+      if (mounted){
+        _showSnackBar('Mot de passe ajouté avec succès');
+        Navigator.pop(context);
+      }
     }
   }
 
