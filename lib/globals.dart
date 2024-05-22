@@ -12,4 +12,5 @@ class Globals {
 
   Globals._internal();
 
+  int userId = 0;
 }
