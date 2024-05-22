@@ -49,88 +49,100 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Gestionnaire de mots de passe'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddPasswordForm()),
-                ).then((value) => _getPasswords());
-              },
-              child: const Text('Ajouter un mot de passe'),
-            ),
-            const SizedBox(height: 50.0),
-            Expanded(
-              child: _passwords.isEmpty
-                ? const Center(child: Text('Aucun mot de passe enregistré'))
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columns: <DataColumn>[
-                          DataColumn(
-                            label: Text('Nom du site'),
-                          ),
-                          DataColumn(
-                            label: Text('URL'),
-                            onSort: (columnIndex, ascending) {},
-                            tooltip: 'URL',
-                          ),
-                          DataColumn(
-                            label: Text('Mot de passe'),
-                          ),
-                        ],
-                        rows: _passwords.map((password) {
-                          return DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text(password.site_name)),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        _launchURL(password.site_url);
-                                      },
-                                      child: Text(password.site_url, style: const TextStyle(color: Colors.blue),),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                        initialValue: password.password,
-                                        obscureText: !password.isPasswordVisible,
-                                        enabled: false,
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AddPasswordForm()),
+              ).then((value) => _getPasswords());
+            },
+            child: const Text('Ajouter un mot de passe'),
+          ),
+          const SizedBox(height: 16.0),
+          Expanded(
+            child: _passwords.isEmpty
+              ? const Center(child: Text('Aucun mot de passe enregistré'))
+              : Container(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: <DataColumn>[
+                        DataColumn(
+                          label: Text('Nom du site'),
+                        ),
+                        DataColumn(
+                          label: Text('URL'),
+                        ),
+                        DataColumn(
+                          label: Text('Mot de passe'),
+                        ),
+                      ],
+                      rows: _passwords.map((password) {
+                        return DataRow(
+                          cells: <DataCell>[
+                            DataCell(Text(password.site_name)),
+                            DataCell(
+                              Row(
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      _launchURL(password.site_url);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Text(
+                                          'Ouvrir',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 16,
+                                          ),
                                         ),
+                                        const SizedBox(width: 8),
+                                        const Icon(Icons.open_in_new, color: Colors.blue),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      initialValue: password.password,
+                                      obscureText: !password.isPasswordVisible,
+                                      enabled: false,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: Icon(password.isPasswordVisible ? Icons.visibility_off : Icons.visibility),
-                                      onPressed: () {
-                                        setState(() {
-                                          password.isPasswordVisible = !password.isPasswordVisible;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(password.isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                                    onPressed: () {
+                                      setState(() {
+                                        password.isPasswordVisible = !password.isPasswordVisible;
+                                      });
+                                    },
+                                    tooltip: 'Afficher le mot de passe',
+                                  ),
+                                ],
                               ),
-                            ],
-                          );
-                        }).toList(),
-                      ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
                     ),
-            )
-          ],
-        ),
+                  ),
+              ),
+          )
+        ],
       ),
     );
   }
