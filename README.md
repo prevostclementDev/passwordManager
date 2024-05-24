@@ -92,4 +92,4 @@ https://invertase.io/blog/assertions-in-dart-and-flutter-tests-an-ultimate-cheat
 ## Difficultés/Commentaires
 ***
 
-C'est assez compliqué de se plonger dans un nouveau langage de style. On a l'habitude du HTML/CSS et ça change totalement, il faut s'habituer à nouveau. Ensuite, pour crypter les données, cela demande beaucoup de recherche, mais ça reste plus logique par rapport à nos habitudes du web. Selon nous, la plus grande difficulté, c'est de devoir s'adapter du web au desktop.
+C'était assez compliqué de se plonger dans un nouveau langage. On a l'habitude du HTML/CSS ou des frameworks Javascript, donc ça change totalement, il faut s'habituer à nouveau. Ensuite, pour crypter les données, cela demande beaucoup de recherche, mais ça reste plus logique par rapport à nos habitudes du web. Selon nous, la plus grande difficulté était de devoir s'adapter du web au desktop.
