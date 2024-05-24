@@ -47,7 +47,7 @@ flutter run lib/main.dart
 ## Compiler le projet vers windows
 ***
 
-Si besoin, activé le support pour le build vers Windows.
+Si besoin, activer le support pour le build vers Windows.
 
 ```shell
 flutter config --enable-windows-desktop
