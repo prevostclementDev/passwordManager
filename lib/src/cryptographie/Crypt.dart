@@ -17,7 +17,7 @@ class Crypt {
   }
 
   // create string for database to recreate secretBox
-  createStringFromBox(SecretBox secretBox) {
+  String createStringFromBox(SecretBox secretBox) {
     return '${base64Encode(secretBox.nonce)}-${base64Encode(secretBox.cipherText)}-${base64Encode(secretBox.mac.bytes)}';
   }
 
@@ -26,7 +26,7 @@ class Crypt {
   explodeStringBox(String stringBox) {
     final splitted = stringBox.split('-');
 
-    if ( splitted.length != 3 ) return splitted;
+    if ( splitted.length != 3 ) return stringBox;
 
     return {
       'nonce' : base64Decode(splitted[0]),
