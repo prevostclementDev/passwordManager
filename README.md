@@ -35,7 +35,7 @@ git clone https://github.com/prevostclementDev/passwordManager.git
 ### Mettre à jour/installer les packages
 
 ````shell
-flutter pub upgrade
+flutter pub get
 ````
 
 ### Run le projet
